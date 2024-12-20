@@ -1,0 +1,48 @@
+.customer-dashboard {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 100vh; /* Full viewport height */
+}
+
+.main-content {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); /* Responsive grid with fixed card width */
+  gap: 20px;
+  overflow-y: auto; /* Enables vertical scrolling */
+  padding: 20px;
+}
+
+.ads-column {
+  width: 250px;
+  margin-left: 20px;
+  background-color: #f9f9f9;
+  height: calc(100% - 80px); /* Adjust based on header height */
+  position: fixed;
+  right: 0;
+  top: 80px; /* Matches header height */
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .ads-column {
+    display: none;
+  }
+
+  .main-content {
+    grid-template-columns: 1fr; /* One card per row on smaller screens */
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+  .main-content {
+    grid-template-columns: repeat(2, 1fr); /* Two cards per row on medium screens */
+  }
+}
+
+@media (min-width: 1200px) {
+  .main-content {
+    grid-template-columns: repeat(4, 1fr); /* Four cards per row on larger screens */
+  }
+}

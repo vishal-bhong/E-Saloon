@@ -1,0 +1,49 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Disallow:
+
+
+
+src/
+├── assets/             # Static files like images, fonts, etc.
+│   └── images/
+│   └── styles/
+├── components/         # Reusable components
+│   ├── common/         # Shared components across different roles
+│   ├── customer/       # Components specific to customer views
+│   ├── vendor/         # Components specific to vendor views
+│   └── admin/          # Components specific to admin views
+├── pages/              # Pages for different routes
+│   ├── customer/       # Customer pages
+│   ├── vendor/         # Vendor pages
+│   └── admin/          # Admin pages
+├── services/           # API calls and other services
+├── store/              # Redux or other state management
+├── utils/              # Utility functions
+├── App.js              # Main application component
+├── index.js            # Entry point
+└── routes/             # Application routing
+
+
+
+Shared Components Examples ( common/ )   ::
+
+Header: A top navigation bar that can be customized based on the user's role but has a common structure.
+
+Footer: A bottom section of the webpage that includes links, contact information, and other general information.
+
+Button: A reusable button component with different styles and functionalities.
+
+Input: Customizable input fields for forms, including text fields, dropdowns, and checkboxes.
+
+Modal: A reusable modal dialog for pop-ups, confirmations, alerts, and forms.
+
+Card: A versatile card component to display information consistently across different pages.
+
+LoadingSpinner: A spinner or loading indicator used while data is being fetched.
+
+Notification: Components to display success, error, warning, or info messages.
+
+Form: Reusable form components, including validation logic.
+
+Table: A table component for displaying data in a structured format.

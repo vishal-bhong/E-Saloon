@@ -1,0 +1,10 @@
+.ads-column {
+    width: 250px;
+    margin-left: 20px;
+    background-color: #f9f9f9;
+    height: calc(100% - 80px); /* Adjust based on header height */
+    position: fixed;
+    right: 0;
+    top: 80px; /* Matches header height */
+    overflow-y: auto;
+}
