@@ -14,7 +14,7 @@ const CustomerRoutes = () => (
       <Route path="/customer/register"  element={<CustomerRegisterPage />} />
       <Route path="/customer/login" element={<CustomerLoginPage />} />
       <Route path="/customer/dashboard" element={<CustomerDashboardPage />} />
-      <Route path='/customer/profile/:id' element={<MyProfilePage />} />
+      <Route path='/customer/profile' element={<MyProfilePage />} />
       <Route path='/customer/appointments' element={<AppointmentPage />} />
     </Routes>
   </Router>

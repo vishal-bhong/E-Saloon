@@ -67,22 +67,29 @@ const barberShops = [
 ];
 
 const CustomerDashboard = () => (
-  <div className="customer-dashboard">
-    <div className="main-content">
-      {barberShops.map((shop, index) => (
-        <Card
-          key={index}
-          title={shop.title}
-          description={shop.description}
-          image={shop.image}
-          rating={shop.rating}
-        />
-      ))}
+    <div className="row justify-content-between ms-3">
+      <div className="col-md-9 mt-4">
+            <div className='row'>
+              {barberShops.map((shop, index) => (
+                    <div className='col-md-4 mb-4'>
+                      <Card
+                        key={index}
+                        title={shop.title}
+                        description={shop.description}
+                        image={shop.image}
+                        rating={shop.rating}
+                        />
+                    </div>
+                  ))}
+            </div>
+        </div>
+
+        <div className="col-md-3 d-none d-md-block position-relative">
+          <div className="position-fixed h-100">
+            <Advertisement />
+          </div>
+        </div>
     </div>
-    <div className="ads-column d-none d-lg-block">
-      <Advertisement />
-    </div>
-  </div>
 );
 
 export default CustomerDashboard;

@@ -36,7 +36,7 @@ const SideDrawer = () => {
                    </li>
 
                    <li className="nav-item pb-3" id="nav-item" data-bs-dismiss="offcanvas">
-                     <Link to='/customer/profile/:id' className="nav-link text-truncate"  id="nav-item-name">
+                     <Link to='/customer/profile' className="nav-link text-truncate"  id="nav-item-name">
                         <i className="bi bi-person h4"></i><span className="ms-3 d-none d-sm-inline h5">My Profile</span>
                      </Link>
                    </li>
@@ -45,13 +45,7 @@ const SideDrawer = () => {
                      <Link to='/customer/appointments' className="nav-link text-truncate"  id="nav-item-name" >
                         <i className="bi bi-receipt h4"></i><span className="ms-3 d-none d-sm-inline h5">My Appointments</span>
                      </Link>
-                   </li>
-                   
-                   <li className="nav-item pb-3" id="nav-item">
-                     <Link to='/' className="nav-link text-truncate"  id="nav-item-name">
-                        <i className="bi bi-bell h4"></i><span className="ms-3 d-none d-sm-inline h5">Notifications</span>
-                     </Link>
-                   </li>  
+                   </li> 
 
                    <li className="nav-item pb-3" id="nav-item">
                      <Link to='' className="nav-link text-truncate"  id="nav-item-name">

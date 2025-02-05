@@ -1,5 +1,5 @@
 import React from 'react';
-import './Card.css';
+// import './Card.css';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 
 const Card = ({ title, description, image, rating }) => {
@@ -18,7 +18,7 @@ const Card = ({ title, description, image, rating }) => {
   };
 
   return (
-    <div className="card">
+    <div className="card" style={{ width : "16rem"}}>
       <img src={image} className="card-img-top" alt={title} />
       <div className="card-body">
         <h5 className="card-title">{title}</h5>

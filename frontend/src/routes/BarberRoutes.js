@@ -3,6 +3,10 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import BarberLoginPage from '../pages/barber/barberLoginPage/BarberLoginPage';
 import BarberRegisterPage from '../pages/barber/barberRegisterPage/BarberRegisterPage';
+import BarberDashboardPage from '../pages/barber/barberDashboard/BarberDashboardPage';
+import BarberProfilePage from '../pages/barber/barberProfilePage/BarberProfilePage';
+import BarberProfileEditPage from '../pages/barber/barberProfilePage/BarberProfileEditPage';
+import HairStylesPage from '../pages/barber/hairStyelsPage/HairStylesPage';
 
 
 const BarberRoutes = () => (
@@ -10,9 +14,12 @@ const BarberRoutes = () => (
         <Routes>
             <Route path="/barber/register" element={<BarberRegisterPage />} />
             <Route path="/barber/login" element={<BarberLoginPage />} />
+            <Route path="/barber/dashboard" element={<BarberDashboardPage />} />
+            <Route path="/barber/profile" element={<BarberProfilePage />} />
+            <Route path="/barber/profile/edit" element={<BarberProfileEditPage />} />
+            <Route path="/barber/hairStyles" element={<HairStylesPage />} />
         </Routes>
     </BrowserRouter>
 )
-
 
 export default BarberRoutes
