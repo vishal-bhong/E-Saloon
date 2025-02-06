@@ -1,27 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import "./CustomerRegister.css";
 import { registerCustomer } from "../../../api/CustomerApi";
 
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
-
 
 const CustomerRegister = () => {
 
     const [ registerData, setRegisterData ] = useState({ fullName: '', email: '', password: '',confirmPassword: '', mobile: '', dob: '', address: '' });
-
-    // const dispatch = useDispatch();
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
+    
 
     
-    const handleSubmit = (e) => {
-        e.preventDefault();          
-        const result = registerCustomer(registerData);
-        console.log(result);
+    const handleSubmit = async (e) => {
+        e.preventDefault(); 
+        if(registerData.password !== registerData.confirmPassword) {
+            toast.warning("'password' and 'confirmPassword' does not match");
+            return;
+        }     
+        const result = await registerCustomer(registerData);
+        toast.success(result.data.message);
+        navigate("/customer/login")
     }    
-     
+
 
     const handleClear = () => {
         setRegisterData({ fullName: '', email: '', password: '',confirmPassword: '', mobile: '', dob: '', address: '' });

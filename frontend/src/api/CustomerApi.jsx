@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const API = axios.create({ baseURL: 'http://localhost:8080' });
 
-export const CustomerLogin = (formData) => {
+export const CustomerSignin = (formData) => {
     const result = API.post('/customers/signin', formData); 
     return result;
 }
