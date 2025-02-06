@@ -1,66 +1,31 @@
 import React, { useState, useEffect } from "react";
 
 import "./CustomerRegister.css";
+import { registerCustomer } from "../../../api/CustomerApi";
 
-// import { useDispatch } from 'react-redux';
 // import { useNavigate } from 'react-router-dom';
-// import FileBase from 'react-file-base64';
-// import axios from 'axios';
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
-// import { userSignup } from "../../../actions/userAuth";
 
 
 const CustomerRegister = () => {
 
-    const [ registerData, setRegisterData ] = useState({ fullName: '', email: '', password: '',confirmPassword: '', mobileNo: '', Dob: '', address: '' });
-    const [ emailVerificationData, setEmailVerificationData ] = useState({ isVerifying: true, emailForVerification: '', OTP: '' });
+    const [ registerData, setRegisterData ] = useState({ fullName: '', email: '', password: '',confirmPassword: '', mobile: '', dob: '', address: '' });
 
     // const dispatch = useDispatch();
     // const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     setEmailVerificationData({ ...emailVerificationData, isVerifying: false, OTP: '' })
-    // }, [emailVerificationData.emailForVerification]);
-
-
-    // const handleGetOtp = (e) => {
-    //     e.preventDefault();
-    //     setEmailVerificationData({ ...emailVerificationData, isVerifying: true, OTP: '' });
-
-    //     axios.post('http://localhost:5000/user/generateOtpForEmail', emailVerificationData)
-    //      .then(res =>{
-    //          toast.success(`OTP sent successfully to ${res.data.result}`);                                    
-    //      })
-    //      .catch((err) => {
-    //          console.log(err.message)            
-    //      });
-
-    // }
-
-    // const handleOtpSubmit = (e) => {
-    //     e.preventDefault();
-
-    //     axios.post('http://localhost:5000/user/verifyOtpForEmail', emailVerificationData)
-    //      .then(res =>{
-    //         toast.success(`${res.data.message}`)
-    //         setSignupData({ ...signupData, email: res.data.result })                    
-    //      })
-    //      .catch((err) => {
-    //          toast.error(`${err.response.data.message}`)
-    //      });
-    // }
     
     const handleSubmit = (e) => {
-        alert("submit  button clicked")
-        // e.preventDefault();          
-        // dispatch(userSignup(signupData, navigate));
+        e.preventDefault();          
+        const result = registerCustomer(registerData);
+        console.log(result);
     }    
      
 
     const handleClear = () => {
-        setRegisterData({ fullName: '', email: '', password: '',confirmPassword: '', mobileNo: '', Dob: '', address: '' });
-        setEmailVerificationData({ isVerifying: true, emailForVerification: '', OTP: '' });
+        setRegisterData({ fullName: '', email: '', password: '',confirmPassword: '', mobile: '', dob: '', address: '' });
+
     }
 
     return (
@@ -80,38 +45,8 @@ const CustomerRegister = () => {
                 </div> 
 
                 <div className="col-12 mt-3 ms-2" id="fullwidthinput">
-                <input type="email" className="form-control form-control-lg" placeholder="email" aria-label="email" value={emailVerificationData.emailForVerification} onChange={(e) => setEmailVerificationData({ ...emailVerificationData, emailForVerification: e.target.value })} />               
+                <input type="email" className="form-control form-control-lg" placeholder="email" aria-label="email" value={registerData.email} onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })} />               
                 </div> 
-
-                {
-                    emailVerificationData.emailForVerification ? (
-                    <> 
-                    {
-                        emailVerificationData.isVerifying ?
-                        (
-                            <>
-                             <div className="row ms-2 mt-3" id="fullwidthinput">
-                                <input className="form-control" id="emailOtp" />
-                                <div className="col-3 me-0 ms-auto text-dark">
-                                    <button id="resend_otp" >Resend OTP</button>
-                                </div>
-                                <button className="col-3 me-0 ms-auto fw-semibold bg-success">submit OTP</button>
-                             </div>
-                            </>
-                        ) :
-                        (
-                            <>
-                              <div className="row ms-2 mt-3" id="fullwidthinput">                      
-                                <button className="col-3 me-0 ms-auto" >Verify email</button>
-                              </div>
-                            </>
-                        )
-                    }                
-                    </>
-                    ) :   (<></>)
-                    
-                } 
-
 
 
                 <div className="col-12 mt-3 ms-2" id="fullwidthinput">
@@ -124,11 +59,11 @@ const CustomerRegister = () => {
 
 
                 <div className="col-12 mt-3 ms-2" id="fullwidthinput">
-                <input type="text" className="form-control form-control-lg" placeholder="Mobile No." aria-label="mobile No" value={registerData.mobileNo} onChange={(e) => setRegisterData({...registerData, mobileNo: e.target.value})} />               
+                <input type="text" className="form-control form-control-lg" placeholder="Mobile No." aria-label="mobile No" value={registerData.mobile} onChange={(e) => setRegisterData({...registerData, mobile: e.target.value})} />               
                 </div> 
 
                 <div className="col-12 mt-3 ms-2" id="fullwidthinput">
-                <input type="date" className="form-control form-control-lg" placeholder="Date of birth" aria-label="DoB" value={registerData.Dob} onChange={(e) => setRegisterData({...registerData, Dob: e.target.value})}/>               
+                <input type="date" className="form-control form-control-lg" placeholder="Date of birth" aria-label= "dob" value={registerData.dob} onChange={(e) => setRegisterData({...registerData, dob: e.target.value})}/>               
                 </div> 
 
 
