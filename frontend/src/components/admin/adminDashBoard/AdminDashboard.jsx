@@ -1,8 +1,9 @@
 import React from "react";
-import { Table, Button, Form, InputGroup, Container, Row, Col } from "react-bootstrap";
+import { Table, Container, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./BarberDashboard.css";
-const BarberDashboard = () => {
+import "./AdminDashboard.css";
+
+const AdminDashboard = () => {
   const appointments = [
     { date: "03.03.2021", time: "09:00 PM", service: "Martial Arts", customer: "Isabella Thompson", duration: "30min", status: "Pending", employee: "img1.png" },
     { date: "03.03.2021", time: "09:00 PM", service: "Martial Arts", customer: "Liam Williams", duration: "30min", status: "Pending", employee: "img2.png" },
@@ -42,5 +43,5 @@ const BarberDashboard = () => {
   );
 };
 
-export default BarberDashboard;
+export default AdminDashboard;
 

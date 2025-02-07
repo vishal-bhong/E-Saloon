@@ -1,61 +1,30 @@
 import React, { useState, useEffect } from "react";
 import FileBase from 'react-file-base64';
-// import { useDispatch } from 'react-redux';
-// import { useNavigate } from 'react-router-dom';
-// import axios from 'axios';
-// import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { registerBarber } from "../../../api/BarberApi";
+import { toast } from "react-toastify";
 
 import "./BarberRegister.css";
 
-
 const BarberRegister = () => {
 
-    const [ barberRegisterData, setBarberRegisterData] = useState({ shopName: '', email:'', password: '', confirmPassword: '', mobileNo: '', dob: '', address: '', experience: '', licenseImg: ''});
- 
-    // const dispatch = useDispatch();
-    // const navigate = useNavigate();
-
-    // useEffect(() => {
-    //     setEmailVerificationData({ ...emailVerificationData, isVerifying: false, OTP: '' })
-    // }, [emailVerificationData.emailForVerification]);
-
-
-    // const handleGetOtp = (e) => {
-    //     e.preventDefault();
-    //     setEmailVerificationData({ ...emailVerificationData, isVerifying: true, OTP: '' });
-
-    //     axios.post('http://localhost:5000/user/generateOtpForEmail', emailVerificationData)
-    //      .then(res =>{
-    //          toast.success(`OTP sent successfully to ${res.data.result}`);                                    
-    //      })
-    //      .catch((err) => {
-    //          console.log(err.message)            
-    //      });
-
-    // }
-
-    // const handleOtpSubmit = (e) => {
-    //     e.preventDefault();
-
-    //     axios.post('http://localhost:5000/user/verifyOtpForEmail', emailVerificationData)
-    //      .then(res =>{
-    //         toast.success(`${res.data.message}`)
-    //         setSignupData({ ...signupData, email: res.data.result })                    
-    //      })
-    //      .catch((err) => {
-    //          toast.error(`${err.response.data.message}`)
-    //      });
-    // }
-    
-    const handleSubmit = (e) => {
-        // e.preventDefault();          
-        // dispatch(userSignup(signupData, navigate));
-        console.log(barberRegisterData);
+    const [ barberRegisterData, setBarberRegisterData] = useState({ shopName: '', email:'', password: '', confirmPassword: '', mobile: '', address: '', description: '', shopImg: ''});
+    const navigate = useNavigate();
+   
+    const handleSubmit = async (e) => {
+        e.preventDefault(); 
+        if(barberRegisterData.password !== barberRegisterData.confirmPassword) {
+            toast.warning("'password' and 'confirmPassword' does not match");
+            return;
+        }     
+        const result = await registerBarber(barberRegisterData);
+        toast.success(result.data.message);
+        navigate("/login")         
     }    
      
 
     const handleClear = () => {
-        setBarberRegisterData({ fullName: '', email:'', password: '', confirmPassword: '', address: '', mobileNo: '', Dob: '', desc: '', licenseImg: ''});
+        setBarberRegisterData({ fullName: '', email:'', password: '', confirmPassword: '', address: '', mobile: '', description: '', shopImg: ''});
     }
 
     return (
@@ -87,30 +56,25 @@ const BarberRegister = () => {
 
 
                 <div className="col-12 mt-3 ms-2" id="fullwidthinput">
-                <input type="text" className="form-control form-control-lg" placeholder="Mobile No." aria-label="mobile No" value={barberRegisterData.mobileNo} onChange={(e) => setBarberRegisterData({...barberRegisterData, mobileNo: e.target.value})} />               
+                <input type="text" className="form-control form-control-lg" placeholder="Mobile No." aria-label="mobile No" value={barberRegisterData.mobile} onChange={(e) => setBarberRegisterData({...barberRegisterData, mobile: e.target.value})} />               
                 </div> 
-
-                <div className="col-12 mt-3 ms-2" id="fullwidthinput">
-                <input type="date" className="form-control form-control-lg" placeholder="Date of birth" aria-label="DoB" value={barberRegisterData.dob} onChange={(e) => setBarberRegisterData({...barberRegisterData, dob: e.target.value})}/>               
-                </div> 
-
 
                 <div className="col-12 mt-3 ms-2" id="fullwidthinput">
                     <input type="text" className="form-control form-control-lg" placeholder="Address" aria-label="Address" value={barberRegisterData.address} onChange={(e) => setBarberRegisterData({...barberRegisterData, address: e.target.value})}/>               
                 </div> 
 
-                <div className="row mt-3 me-4       " id="fullwidthinput">
+                <div className="row mt-3 me-4" id="fullwidthinput">
                     <div className="col-6">
                         <label for="file_input2" className="col-form-label fw-bold">Shop image :</label> <br/>
                     </div>
 
                     <div className="col-6">
-                        <FileBase type="file" multiple={false} onDone={ ({ base64 }) => setBarberRegisterData({ ...barberRegisterData, licenseImg: base64 }) } id='file_input2' /> <br />
+                        <FileBase type="file" multiple={false} onDone={ ({ base64 }) => setBarberRegisterData({ ...barberRegisterData, shopImg: base64 }) } id='file_input2' /> <br />
                     </div>
                 </div> 
 
                 <div className="col-12 mt-3 ms-2" id="fullwidthinput">
-                    <textarea type="text" className="form-control form-control-lg" placeholder="shop description" aria-label="shop description" value={barberRegisterData.desc} onChange={(e) => setBarberRegisterData({...barberRegisterData, desc: e.target.value})}/>               
+                    <textarea type="text" className="form-control form-control-lg" placeholder="shop description" aria-label="shop description" value={barberRegisterData.description} onChange={(e) => setBarberRegisterData({...barberRegisterData, description: e.target.value})}/>               
                 </div> 
 
                 <div className="row gx-5 mt-4 mb-3">

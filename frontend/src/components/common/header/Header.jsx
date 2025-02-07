@@ -2,13 +2,28 @@ import React from 'react';
 import './Header.css';
 
 import { FaBars } from 'react-icons/fa';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify';
+import { userLogout } from '../../../api/CommonApi';
 
 const Header = ({ role, toggleDrawer }) => {
   const menuItems = {
     customer: ['Profile', 'Appointments', 'Feedback', 'Contact Us'],
     barber: ['Dashboard', 'profile', 'hairStyles' ],
   };
+
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    const result = await userLogout();
+    console.log(result)
+    if(result.data == "Successfully logged out"){
+      localStorage.removeItem("jwtToken");
+      localStorage.removeItem("userType");
+      toast.success(result.data)
+      navigate("/login");
+    }
+  }
 
   return (
     <header className="header">
@@ -37,9 +52,7 @@ const Header = ({ role, toggleDrawer }) => {
 
         <div className="header-actions d-none d-md-flex">
           <input type="text" placeholder="Search..." className="form-control search-bar" />
-          <Link to={`/${role}/login`}>
-            <button className="btn btn-outline-light">Logout</button>
-          </Link>
+            <button className="btn btn-outline-light" onClick={handleLogout}>Logout</button>
         </div>
       </div>
     </header>

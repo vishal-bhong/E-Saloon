@@ -14,30 +14,31 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Configuration //equivalent to bean config xml
-@EnableWebSecurity //to enable annotation support for spring sec
+@Configuration
+@EnableWebSecurity
 public class SecurityConfiguration {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private CustomJWTAuthenticationFilter customJWTAuthenticationFilter;
 	
-	// Configure the bean to customize spring security filter chain
+
 		@Bean
 		public SecurityFilterChain authorizeRequests(HttpSecurity http) throws Exception
 		{
 			//1. Disable CSRF filter
 			http.csrf(customizer -> customizer.disable())
 			//2. configure URL based access
-	        .authorizeHttpRequests
-	        (request -> 
-	        request.requestMatchers("/customers/register",
-	        		"/customers/signin","/customer/**").permitAll() 
+	        .authorizeHttpRequests(request -> 
+	        
+	        request.requestMatchers("/customers/register", "/signout", "/customer/**",
+	        						"/barber/register",
+	        						"/admin/register", "/signin", "/logout").permitAll() 
 	        //required explicitly for JS clients (eg React app - to permit pre flight requests)
 	        .requestMatchers(HttpMethod.OPTIONS).permitAll()
-	        	
-	       .requestMatchers("/customer/**")
-	       .hasRole("customer")       		
+	        .requestMatchers("/admin/**").hasRole("ADMIN")
+	       .requestMatchers("/barber/**").hasRole("BARBER")
+	       .requestMatchers("/customers/**").hasRole("CUSTOMER")      		
 	       .anyRequest().authenticated())  
 	  //      .httpBasic(Customizer.withDefaults()) - replacing it by custom JWT filter
 	        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -47,10 +48,28 @@ public class SecurityConfiguration {
 		}
 
 		@Bean
-		public AuthenticationManager authenticationManager
-		(AuthenticationConfiguration config) throws Exception
+		public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception
 		{
 			return config.getAuthenticationManager();
 		}
+
+		// now can access userType in controllers as 
+
+//		public class CustomerController {
+//
+//		    @GetMapping("/profile")
+//		    public ResponseEntity<?> getCustomerProfile(Authentication authentication) {
+//		        CustomUserDetailsImpl userDetails = (CustomUserDetailsImpl) authentication.getPrincipal();
+//		        String userType = (String) authentication.getDetails();
+//
+//		        if (!"CUSTOMER".equals(userType)) {
+//		            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access Denied");
+//		        }
+//
+//		        Customer customer = (Customer) userDetails.getUser();
+//		        // Return customer profile details
+//		        return ResponseEntity.ok(customer);
+//		    }
+//		}
 
 }

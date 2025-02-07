@@ -3,16 +3,8 @@ package com.app.dtos;
 import java.time.LocalDate;
 
 import jakarta.persistence.Column;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
-public class CustomerReqDTO extends UserReqDTO {
+public class AdminReqDTO extends UserReqDTO{
 
 	private String fullName;
 	
@@ -21,8 +13,8 @@ public class CustomerReqDTO extends UserReqDTO {
 	private LocalDate dob;
 
 	private String address;
-
-	public CustomerReqDTO(String fullName, String email, String password, String mobile, LocalDate dob, String address) {
+	
+	public AdminReqDTO(String fullName, String email, String password, String mobile, LocalDate dob, String address) {
 		super(email, password);
 		this.fullName = fullName;
 		this.mobile = mobile;
@@ -30,4 +22,3 @@ public class CustomerReqDTO extends UserReqDTO {
 		this.address = address;
 	}
 }
-	

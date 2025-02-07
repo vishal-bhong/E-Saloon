@@ -13,6 +13,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Component;
 
+import com.app.entities.Admin;
+import com.app.entities.Barber;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -41,18 +44,30 @@ public class JwtUtils {
 	public String generateJwtToken(Authentication authentication) {
 		log.info("generate jwt token " + authentication);
 		
-		CustomCustomerDetailsImpl CustomerPrincipal = (CustomCustomerDetailsImpl) authentication.getPrincipal();
+		CustomUserDetailsImpl UserPrincipal = (CustomUserDetailsImpl) authentication.getPrincipal();
 		
+		String userType;
+		
+		if (UserPrincipal.getUser() instanceof Admin) {
+		userType = "ADMIN";
+		} else if (UserPrincipal.getUser() instanceof Barber) {
+		userType = "BARBER";
+		} else {
+		userType = "CUSTOMER";
+		}
+		    
 
 		return Jwts.builder()
-				.setSubject((CustomerPrincipal.getUsername()))
+				.setSubject((UserPrincipal.getUsername()))
 				
 				.setIssuedAt(new Date())
 				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
 				
-				.claim("authorities", getAuthoritiesInString(CustomerPrincipal.getAuthorities()))
-
-				.claim("customer_id",CustomerPrincipal.getCustomer().getId())
+				.claim("authorities", getAuthoritiesInString(UserPrincipal.getAuthorities()))
+				
+				.claim("userType", userType)
+				
+				.claim("user_id",UserPrincipal.getUser().getId())
 		
 				.signWith(key, SignatureAlgorithm.HS512)
 
@@ -63,7 +78,10 @@ public class JwtUtils {
 	public String getUserNameFromJwtToken(Claims claims) {
 		return claims.getSubject();
 	}
-
+	
+	public String getUserTypeFromJwtToken(Claims claims) {
+	    return claims.get("userType", String.class);
+	}
 
 	public Claims validateJwtToken(String jwtToken) {
 		Claims claims = Jwts.parserBuilder()
@@ -76,8 +94,8 @@ public class JwtUtils {
 	}
 
 	private String getAuthoritiesInString(Collection<? extends GrantedAuthority> authorities) {
-		String authorityString = authorities.stream().
-				map(authority -> authority.getAuthority())
+		String authorityString = authorities.stream()
+				.map(authority -> authority.getAuthority())
 				.collect(Collectors.joining(","));
 		System.out.println(authorityString);
 		return authorityString;
@@ -94,9 +112,9 @@ public class JwtUtils {
 	
 	
 	
-	public Long getCustomerIdFromJwtToken(Claims claims) {
+	public Long getUserIdFromJwtToken(Claims claims) {
 		
-			return Long.valueOf((int)claims.get("customer_id"));			
+			return Long.valueOf((int)claims.get("user_id"));			
 	}
 			
 	
@@ -108,9 +126,12 @@ public class JwtUtils {
 
 				List<GrantedAuthority> authorities = getAuthoritiesFromClaims(payloadClaims);
 	
-				Long userId = getCustomerIdFromJwtToken(payloadClaims);
+				Long userId = getUserIdFromJwtToken(payloadClaims);
+				String userType = getUserTypeFromJwtToken(payloadClaims);
 
 				UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, userId, authorities);
+				token.setDetails(userType);
+				
 				System.out.println("is authenticated "+token.isAuthenticated());//true
 				return token;
 			}

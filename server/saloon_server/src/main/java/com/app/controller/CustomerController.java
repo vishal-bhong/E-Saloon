@@ -61,24 +61,24 @@ public class CustomerController {
 		
 	}
 	
-	@PostMapping("/signin")
-	public ResponseEntity<?> customerSignIn(@RequestBody @Valid
-			AuthRequest dto) {
-		System.out.println("in sign in "+dto);
-		
-		//1. Create auth token using suser supplied em n pwd
-		UsernamePasswordAuthenticationToken authenticationToken = 
-				new UsernamePasswordAuthenticationToken(dto.getEmail(),dto.getPassword());
-		
-		System.out.println(authenticationToken.isAuthenticated());//f
-		
-		//2. invoke Spring sec supplied auth mgr's authenticate method
-		Authentication authToken = authenticationManager.authenticate(authenticationToken);
-		//=> auth success
-		
-		System.out.println(authToken.isAuthenticated());//t
-		//3 . Send auth respone to the client containing JWTS
-		return ResponseEntity.status(HttpStatus.CREATED)
-							 .body(new AuthResp("Successful Auth !", jwtUtils.generateJwtToken(authToken)));		
-	}
+//	@PostMapping("/signin")
+//	public ResponseEntity<?> customerSignIn(@RequestBody @Valid
+//			AuthRequest dto) {
+//		System.out.println("in sign in "+dto);
+//		
+//		//1. Create auth token using suser supplied em n pwd
+//		UsernamePasswordAuthenticationToken authenticationToken = 
+//				new UsernamePasswordAuthenticationToken(dto.getEmail(),dto.getPassword());
+//		
+//		System.out.println(authenticationToken.isAuthenticated());//f
+//		
+//		//2. invoke Spring sec supplied auth mgr's authenticate method
+//		Authentication authToken = authenticationManager.authenticate(authenticationToken);
+//		//=> auth success
+//		
+//		System.out.println(authToken.isAuthenticated());//t
+//		//3 . Send auth respone to the client containing JWTS
+//		return ResponseEntity.status(HttpStatus.CREATED)
+//							 .body(new AuthResp("Successful Auth !", jwtUtils.generateJwtToken(authToken), "Customer"));		
+//	}
 }

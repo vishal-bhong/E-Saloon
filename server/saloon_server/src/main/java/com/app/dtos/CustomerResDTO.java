@@ -11,12 +11,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class CustomerResDTO extends BaseDTO {
+public class CustomerResDTO extends UserResDTO {
 	private String fullName;
 
-	private String email;
-	
-	
 	private String mobile;
 	
 	private LocalDate dob;
@@ -24,9 +21,8 @@ public class CustomerResDTO extends BaseDTO {
 	private String address;
 
 	public CustomerResDTO(String fullName, String email, String mobile, LocalDate dob, String address) {
-		super();
+		super(email);
 		this.fullName = fullName;
-		this.email = email;
 		this.mobile = mobile;
 		this.dob = dob;
 		this.address = address;

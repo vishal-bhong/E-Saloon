@@ -11,7 +11,6 @@ const CustomerRegister = () => {
     const [ registerData, setRegisterData ] = useState({ fullName: '', email: '', password: '',confirmPassword: '', mobile: '', dob: '', address: '' });
     const navigate = useNavigate();
     
-
     
     const handleSubmit = async (e) => {
         e.preventDefault(); 
@@ -21,7 +20,7 @@ const CustomerRegister = () => {
         }     
         const result = await registerCustomer(registerData);
         toast.success(result.data.message);
-        navigate("/customer/login")
+        navigate("/login")
     }    
 
 

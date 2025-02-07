@@ -8,18 +8,18 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.app.custom_exceptions.ApiException;
-import com.app.dao.CustomerDao;
 import com.app.dtos.ApiResponse;
 import com.app.dtos.CustomerReqDTO;
 import com.app.dtos.CustomerResDTO;
 import com.app.entities.Customer;
+import com.app.repository.CustomerRepository;
 
 @Service
 @Transactional
 public class CustomerServiceImpl implements CustomerService {
 	
 	@Autowired
-	private CustomerDao customerDao;
+	private CustomerRepository customerRepository;
 	
 	@Autowired
 	private ModelMapper modelMapper;
@@ -30,14 +30,14 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public ApiResponse registerCustomer(CustomerReqDTO dto) {
 		//dto -> entity
-		if (customerDao.existsByEmail(dto.getEmail()))
+		if (customerRepository.existsByEmail(dto.getEmail()))
 			throw new ApiException("User email already exists!!!!");
 		
 		Customer transientCustomer = modelMapper.map(dto, Customer.class);
 		
 		transientCustomer.setPassword(passwordEncoder.encode(transientCustomer.getPassword()));
 		
-		Customer persistentCustomer = customerDao.save(transientCustomer);
+		Customer persistentCustomer = customerRepository.save(transientCustomer);
 		
 		return new ApiResponse("customer registered successfully");
 	}

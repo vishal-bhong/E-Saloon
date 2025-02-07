@@ -18,17 +18,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString(callSuper = true, exclude = { "password" })
-public class Customer extends BaseEntity {
+@ToString(callSuper = true)
+public class Customer extends User {
 
 	@Column(name = "full_name", length = 20)
 	private String fullName;
-
-	@Column(length = 40, unique = true) 
-	private String email;
-	
-	@Column(length = 500, nullable = false)
-	private String password;
 	
 	@Column(length = 40, nullable = false)
 	private String mobile;
@@ -39,10 +33,8 @@ public class Customer extends BaseEntity {
 	private String address;
 
 	public Customer(String fullName, String email, String password, String mobile, LocalDate dob, String address) {
-		super();
+		super(email, password);
 		this.fullName = fullName;
-		this.email = email;
-		this.password = password;
 		this.mobile = mobile;
 		this.dob = dob;
 		this.address = address;
