@@ -25,7 +25,7 @@ const CustomerDashboardPage = () => {
     <div className="customer-dashboard-page">
       <Header role="customer" />
       {/* <SideDrawer isOpen={drawerOpen} toggleDrawer={toggleDrawer} menuItems={customerMenuItems} /> */}
-      <SideDrawer />
+      <SideDrawer role="customer" />
       {/* <main className={`main- ${drawerOpen ? 'drawer-open' : ''}`}> */}
       <CustomerDashboard />
       {/* </main> */}

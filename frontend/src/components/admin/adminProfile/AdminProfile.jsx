@@ -1,25 +1,26 @@
 import React from 'react';
-import './CustomerProfile.css'
+import './AdminProfile.css'
 import { BsPersonCircle } from "react-icons/bs";
 import { MdMailOutline, MdPhone, MdEventNote, MdLocationOn } from 'react-icons/md'
-import { getCustomerProfile } from '../../../api/CustomerApi';
+import { getAdminProfile } from '../../../api/AdminApi';
+import { useEffect } from 'react';
 
 
-const CustomerProfile = () => {
+const AdminProfile = () => {
     const [data, setData] = React.useState({});
     //React.StrictMode intentionally mounts components twice in development to help identify potential side effects and other issues in your components.
-    React.useEffect(() => {
-        console.log("in customerProfile useEffect !")
+    useEffect(() => {
+        console.log("in adminprofile useEffect !")
         handlegetAdminProfile();
     },[])
 
 
     const handlegetAdminProfile = async () => {
-        const result = await getCustomerProfile();
+        const result = await getAdminProfile();
         setData(result?.data);
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
         console.log(data)
     },[data])
 
@@ -59,4 +60,4 @@ const CustomerProfile = () => {
     )
 }
 
-export default CustomerProfile
+export default AdminProfile

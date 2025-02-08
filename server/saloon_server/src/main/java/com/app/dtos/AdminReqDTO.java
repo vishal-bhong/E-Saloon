@@ -3,8 +3,16 @@ package com.app.dtos;
 import java.time.LocalDate;
 
 import jakarta.persistence.Column;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-public class AdminReqDTO extends UserReqDTO{
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString(callSuper = true)
+public class AdminReqDTO extends UserReqDTO {
 
 	private String fullName;
 	

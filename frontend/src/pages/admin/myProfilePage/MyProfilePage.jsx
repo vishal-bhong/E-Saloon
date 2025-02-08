@@ -1,8 +1,8 @@
 // import { useState } from "react";
 import Header from "../../../components/common/header/Header";
 // import SideDrawer from "../../../components/common/sideDrawer/SideDrawer";
-import CustomerProfile from "../../../components/customer/customerProfile/CustomerProfile"
 import SideDrawer from "../../../components/common/sidedrawer/SideDrawer";
+import AdminProfile from "../../../components/admin/adminProfile/AdminProfile";
 
 const MyProfilePage = () => {
     // const [drawerOpen, setDrawerOpen] = useState(false);
@@ -21,14 +21,11 @@ const MyProfilePage = () => {
 
     return (
         <>
-        <Header role="customer"/>
-        <SideDrawer role="customer" />
-            {/* <SideDrawer isOpen={drawerOpen} toggleDrawer={toggleDrawer} menuItems={customerMenuItems}/> */}
-            {/* <main className={`${drawerOpen ? 'drawer-open' : ''}`}> */}
-                <div className="d-flex justify-content-center">
-                    <CustomerProfile />
-                </div>
-            {/* </main>       */}
+            <Header role="admin"/>
+            <SideDrawer role={"admin"} />
+            <div className="d-flex justify-content-center">
+                <AdminProfile />
+            </div>
         </>
     )
 }

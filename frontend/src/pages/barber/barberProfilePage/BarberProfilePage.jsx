@@ -8,7 +8,7 @@ const BarberProfilePage = () => {
     return (
         <>
             <Header role="barber"/>
-            <SideDrawer />
+            <SideDrawer role={"barber"} />
             <div className="d-flex justify-content-center">
                 <BarberProfile />
             </div>

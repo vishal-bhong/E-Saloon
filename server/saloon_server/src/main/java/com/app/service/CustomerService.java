@@ -7,4 +7,5 @@ import com.app.dtos.CustomerResDTO;
 public interface CustomerService {
 	
 	ApiResponse registerCustomer(CustomerReqDTO dto);
+	public CustomerResDTO getCustomerById(Long customerId);
 }

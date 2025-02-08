@@ -1,17 +1,14 @@
 import React from 'react'
 import './SideDrawer.css'
 import { Link } from 'react-router-dom'
-// import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
-const SideDrawer = () => {
+const SideDrawer = ({ role }) => {
 
-      // React.useEffect(() => 
-      // { 
-      //    // Initialize Offcanvas Components after DOM is fully loaded 
-      //    var offcanvasElementList = [].slice.call(document.querySelectorAll('.offcanvas')) 
-      //    var offcanvasList = offcanvasElementList.map(function (offcanvasEl) { 
-      //       return new windowbootstrap.Offcanvas(offcanvasEl) }) 
-      // }, []);
+      const menuItems = {
+         customer: ['Dashboard', 'Profile', 'Appointments'],
+         barber: ['Dashboard', 'profile', 'hairStyles' ],
+         admin: ['Dashboard', 'barberManager', 'profile', 'register']
+       };
 
     return(
         <>
@@ -29,7 +26,15 @@ const SideDrawer = () => {
            <div className="offcanvas-body px-0">
                <ul className="nav nav-pills flex-column mb-sm-auto mb-0" id="menu">
 
-                   <li className="nav-item pb-3" id="nav-item" data-bs-dismiss="offcanvas">
+                  {menuItems[role]?.map((item, index) => (
+                     <li key={index} className="nav-item pb-3" id="nav-item" data-bs-dismiss="offcanvas">
+                        <Link to={`/${role}/${item}`} className="nav-link text-truncate w-100"  id="nav-item-name">
+                           <span className="ms-1 d-none d-sm-inline h5">{item}</span>
+                        </Link>
+                     </li>    
+                  ))}
+
+                   {/* <li className="nav-item pb-3" id="nav-item" data-bs-dismiss="offcanvas">
                      <Link to='/customer/dashboard' className="nav-link text-truncate"  id="nav-item-name">
                         <i className="bi bi-house-door h4"></i><span className="ms-3 d-none d-sm-inline h5">Dashboard</span>
                      </Link>
@@ -57,7 +62,7 @@ const SideDrawer = () => {
                      <Link className="nav-link text-truncate"  id="nav-item-name">
                         <i className="bi bi-send-exclamation h4"></i><span className="ms-3 d-none d-sm-inline h5">Contact us</span>
                      </Link>
-                   </li>            
+                   </li>             */}
                </ul>
            </div>
            

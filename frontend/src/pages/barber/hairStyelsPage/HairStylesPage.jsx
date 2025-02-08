@@ -7,7 +7,7 @@ const HairStylesPage = () => {
     return (
         <div>
             <Header role={"barber"} />
-            <SideDrawer />
+            <SideDrawer role={"barber"} />
             <HairStyles />
         </div>
     );

@@ -1,73 +1,59 @@
 package com.app.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
-
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
-import com.app.security.JwtUtils;
+import com.app.dtos.AdminReqDTO;
 import com.app.dtos.AdminResDTO;
 import com.app.dtos.ApiResponse;
-import com.app.dtos.AuthRequest;
-import com.app.dtos.AuthResp;
-import com.app.dtos.CustomerReqDTO;
 import com.app.dtos.CustomerResDTO;
-import com.app.service.CustomerService;
+import com.app.security.JwtUtils;
+import com.app.service.AdminService;
 
 import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/customers")
+@RequestMapping("/admin")
 @CrossOrigin(origins = "http://localhost:3000")
-public class CustomerController {
-	
+public class AdminController {
+
 	@Autowired
-	private CustomerService customerService;
+	private AdminService adminService;
 	
-	@Autowired
-	private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtUtils jwtUtils;
 	
-	@Autowired
-	private JwtUtils jwtUtils;
 
 	@PostMapping("/register")
-	public ResponseEntity<?> addNewCustomer(@RequestBody CustomerReqDTO dto) {
+	public ResponseEntity<?> addNewBarber(@RequestBody AdminReqDTO dto) {
 		
-		System.out.println("in add new customer " + dto);
+		System.out.println("in add new Admin " + dto);
 		try {
 			return ResponseEntity.status(HttpStatus.CREATED)
-					.body(customerService
-							.registerCustomer(dto));
+					.body(adminService.registerAdmin(dto));
 					
 		} catch (RuntimeException e) {
-			return ResponseEntity.
-					status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(new ApiResponse(e.getMessage()));
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+								 .body(new ApiResponse(e.getMessage()));
 		}
 		
 	}
 	
 	@GetMapping("/profile")
-    public ResponseEntity<?> getCustomerProfile(HttpServletRequest request) {
+    public ResponseEntity<?> getAdminProfile(HttpServletRequest request) {
     	System.out.println("in get profile");
     	String authHeader = request.getHeader("Authorization");
     	
@@ -85,14 +71,36 @@ public class CustomerController {
         		userId = jwtUtils.getUserIdFromJwtToken(claims);
         	}
         	
-        	CustomerResDTO customerResDTO = customerService.getCustomerById(userId);
+        	AdminResDTO adminResDTO = adminService.getAdminById(userId);
         	
-        	System.out.println(customerResDTO);
-        	return ResponseEntity.ok(customerResDTO);
+        	System.out.println(adminResDTO);
+        	return ResponseEntity.ok(adminResDTO);
         	
         } catch (RuntimeException e) {
         	return ResponseEntity.status(HttpStatus.NOT_FOUND)
         			.body(new ApiResponse(e.getMessage()));
         }   
     }
+	
+	
+	@GetMapping("/getCustomers")
+	public ResponseEntity<?> getAllCustomers() {
+		System.out.println("in get all customers");
+		List<CustomerResDTO> customers = 
+				adminService.getAllCustomers();
+		if (customers.isEmpty()) {
+			// SC 204
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		} else {
+			// SC 200 + list
+			return ResponseEntity.ok(customers);
+		}
+	}
+	
+	
+	@DeleteMapping("/delete/customer/{customerId}")
+	public ResponseEntity<?> deleteCategory(@PathVariable Long customerId) {
+		System.out.println("in delete customer " + customerId);
+		return ResponseEntity.ok(adminService.deleteCustomer(customerId));
+	}
 }

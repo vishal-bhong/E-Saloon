@@ -8,7 +8,7 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 public class AuthRequest {
 	@NotBlank(message = "Email must be not null n not blank!!!!")
 	@Email(message = "Invalid email format")

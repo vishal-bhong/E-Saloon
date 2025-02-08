@@ -7,7 +7,7 @@ const BarberDashboardPage = () => {
     return (
         <div>
             <Header role={"barber"} />
-            <SideDrawer />
+            <SideDrawer role={"barber"} />
             <BarberDashboard />
         </div>
     );

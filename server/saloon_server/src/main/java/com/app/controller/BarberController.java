@@ -25,7 +25,7 @@ public class BarberController {
 	@PostMapping("/register")
 	public ResponseEntity<?> addNewBarber(@RequestBody BarberReqDTO dto) {
 		
-		System.out.println("in add new customer " + dto);
+		System.out.println("in add new barber " + dto);
 		try {
 			return ResponseEntity.status(HttpStatus.CREATED)
 					.body(barberService.registerBarber(dto));

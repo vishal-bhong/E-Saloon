@@ -2,39 +2,65 @@ import React from "react";
 import { Table, Container, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./AdminDashboard.css";
+import { deleteCustomer, getAllCustomers } from "../../../api/AdminApi";
+import { toast } from "react-toastify";
 
 const AdminDashboard = () => {
-  const appointments = [
-    { date: "03.03.2021", time: "09:00 PM", service: "Martial Arts", customer: "Isabella Thompson", duration: "30min", status: "Pending", employee: "img1.png" },
-    { date: "03.03.2021", time: "09:00 PM", service: "Martial Arts", customer: "Liam Williams", duration: "30min", status: "Pending", employee: "img2.png" },
-    { date: "03.03.2021", time: "09:00 PM", service: "Martial Arts", customer: "Sofia Martinez", duration: "30min", status: "Pending", employee: "img3.png" },
-  ];
+      const [data, setData] = React.useState([]);
+
+      //React.StrictMode intentionally mounts components twice in development to help identify potential side effects and other issues in your components.
+      React.useEffect(() => {
+          console.log("in adminprofile useEffect !")
+          handlegetAdminProfile();
+      },[])
+  
+  
+      const handlegetAdminProfile = async () => {
+          const result = await getAllCustomers();
+          setData(result?.data);
+      }
+  
+      React.useEffect(() => {
+          console.log(data)
+      },[data])
+
+
+      const deleteCustomerById = async(id) => {
+        console.log(id);
+        const result = await deleteCustomer(id);
+        toast.success(result?.data?.message);
+        handlegetAdminProfile();
+      }
   
   return (
-    <Container className="appointments-container p-4 mt-5 col-11">
+    <Container className="-container p-4 mt-5 col-11">
       <Row className="mb-4">
-        <Col><h2 className="dashboard-title">Appointments</h2></Col>
+        <Col><h2 className="dashboard-title">customers data :</h2></Col>
       </Row>
-      <Table striped bordered hover className="text-center appointments-table">
+      <Table striped bordered hover className="text-center customers-table">
         <thead className="table-header">
           <tr>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Service</th>
-            <th>Customer</th>
-            <th>Duration</th>
-            <th>Status</th>
+            <th>full name</th>
+            <th>email</th>
+            <th>mobile</th>
+            <th>dob</th>
+            <th>address</th>
+            <th>action</th>
           </tr>
         </thead>
         <tbody>
-          {appointments.map((appt, index) => (
+          {data.map((customer, index) => (
             <tr key={index}>
-              <td>{appt.date}</td>
-              <td>{appt.time}</td>
-              <td>{appt.service}</td>
-              <td>{appt.customer}</td>
-              <td>{appt.duration}</td>
-              <td><span className="status-badge bg-warning text-dark">{appt.status}</span></td>
+              <td>{customer.fullName}</td>
+              <td>{customer.email}</td>
+              <td>{customer.mobile}</td>
+              <td>{customer.dob}</td>
+              <td>{customer.address}</td>
+              <td>
+                  <button className="btn btn-danger" onClick={() => deleteCustomerById(customer.id)}>
+                      delete
+                  </button>
+              </td>
             </tr>
           ))}
         </tbody>

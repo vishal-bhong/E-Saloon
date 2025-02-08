@@ -47,7 +47,7 @@ const AppointmentPage = () => {
     return (
         <>
             <Header role="customer" />
-            <SideDrawer />
+            <SideDrawer role="customer" />
             <div className="">
                 {
                     appointments.map((appointment) => {

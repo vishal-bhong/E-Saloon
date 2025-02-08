@@ -31,7 +31,6 @@ public class Admin extends User {
 
 	@Column(length = 80)
 	private String address;
-	
 
 	public Admin(String fullName, String email, String password, String mobile, LocalDate dob, String address) {
 		super(email, password);

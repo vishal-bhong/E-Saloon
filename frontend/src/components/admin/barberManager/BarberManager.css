@@ -1,4 +1,4 @@
-.customers-container {
+.barbers-container {
     background-color: #f8f9fa;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -9,8 +9,12 @@
     font-weight: bold;
     color: #343a40;
   }
-    
-  .customers-table {
+  
+  .search-bar {
+    max-width: 400px;
+  }
+  
+  .barbers-table {
     background: white;
     border-radius: 8px;
     overflow: hidden;
@@ -20,6 +24,17 @@
     background-color: #007bff !important;
     color: white;
   }
-
   
+  .status-badge {
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+  
+  .employee-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border: 2px solid #007bff;
+  }
   

@@ -7,9 +7,11 @@ import { toast } from 'react-toastify';
 import { userLogout } from '../../../api/CommonApi';
 
 const Header = ({ role, toggleDrawer }) => {
+  
   const menuItems = {
-    customer: ['Profile', 'Appointments', 'Feedback', 'Contact Us'],
+    customer: ['Dashboard', 'Profile', 'Appointments'],
     barber: ['Dashboard', 'profile', 'hairStyles' ],
+    admin: ['Dashboard', 'barberManager', 'profile', 'register']
   };
 
   const navigate = useNavigate();

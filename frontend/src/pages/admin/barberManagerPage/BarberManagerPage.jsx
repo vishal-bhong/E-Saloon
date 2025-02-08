@@ -1,18 +1,18 @@
 import React from 'react';
 import Header from '../../../components/common/header/Header';
 import SideDrawer from '../../../components/common/sidedrawer/SideDrawer';
-import AdminDashboard from '../../../components/admin/adminDashBoard/AdminDashboard';
+import BarberManager from '../../../components/admin/barberManager/BarberManager';
 
-const AdminDashboardPage = () => {
+const BarberManagerPage = () => {
     return (
         <div>
             <Header role={"admin"} />
             <SideDrawer role={"admin"} />
-            <AdminDashboard />
+            <BarberManager />
         </div>
     );
 }
 
-export default AdminDashboardPage;
+export default BarberManagerPage;
 
 
