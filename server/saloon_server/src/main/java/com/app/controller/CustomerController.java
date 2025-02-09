@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
-
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.http.ResponseEntity;
 
@@ -34,7 +34,10 @@ import com.app.dtos.AuthResp;
 import com.app.dtos.BarberResDTO;
 import com.app.dtos.CustomerReqDTO;
 import com.app.dtos.CustomerResDTO;
+import com.app.dtos.OrderResponse;
 import com.app.service.CustomerService;
+import com.app.service.RazorPayService;
+import com.razorpay.Order;
 
 import io.jsonwebtoken.Claims;
 
@@ -51,6 +54,10 @@ public class CustomerController {
 	
 	@Autowired
 	private JwtUtils jwtUtils;
+	
+	 @Autowired
+	 private RazorPayService razorpayService;
+	 
 
 	@PostMapping("/register")
 	public ResponseEntity<?> addNewCustomer(@RequestBody CustomerReqDTO dto) {
@@ -123,4 +130,18 @@ public class CustomerController {
 					.body(new ApiResponse(e.getMessage()));
 		}
 	}
+	
+	 @GetMapping(value = "/createOrder", produces= MediaType.APPLICATION_JSON_VALUE)
+	 public ResponseEntity<?> createOrder() throws Exception {
+		 System.out.println("in make payment order");
+	     try {
+	    	 OrderResponse order = razorpayService.createOrder(40);
+	    	 System.out.println(order);
+	    	return ResponseEntity.ok(order);
+	    			
+	     } catch (RuntimeException e) {
+	    	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	    						.body(new ApiResponse(e.getMessage()));
+	     }	     
+	 }
 }

@@ -37,3 +37,15 @@ export const getBarberProfile = async (barberId) => {
     
     return result;
 }
+
+
+export const getPaymentOrder = async () => {
+    const token = localStorage.getItem("jwtToken");
+
+    const result = await API.get('/customers/createOrder', { 
+        headers : { 'Authorization' : 'Bearer ' + token,
+                    'Accept' : 'application/json' }
+    });
+    
+    return result?.data;
+}

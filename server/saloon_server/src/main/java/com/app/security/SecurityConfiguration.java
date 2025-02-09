@@ -34,11 +34,12 @@ public class SecurityConfiguration {
 	        request.requestMatchers("/customers/register", "/signout", "/customer/**",
 	        						"/barber/register",
 	        						"/admin/register", "/signin", "/logout").permitAll() 
+
 	        //required explicitly for JS clients (eg React app - to permit pre flight requests)
 	        .requestMatchers(HttpMethod.OPTIONS).permitAll()
 	        .requestMatchers("/admin/**").hasRole("ADMIN")
 	       .requestMatchers("/barber/**").hasRole("BARBER")
-	       .requestMatchers("/customers/**").hasRole("CUSTOMER")      		
+	       .requestMatchers("/customers/**", "/api/payment/**").hasRole("CUSTOMER")      		
 	       .anyRequest().authenticated())  
 	  //      .httpBasic(Customizer.withDefaults()) - replacing it by custom JWT filter
 	        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
