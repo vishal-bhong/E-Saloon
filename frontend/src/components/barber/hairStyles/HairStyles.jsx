@@ -2,24 +2,49 @@ import React from "react";
 import { Table, Button, Form, InputGroup, Container, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./HairStyles.css";
+import { addNewStyle, deleteHairStyle, getAllStylesByToken } from "../../../api/BarberApi";
+import { toast } from "react-toastify";
 
 const HairStyles = () => {
-  const [ hair_Styles, setHair_Styles ] = React.useState ([
-    { style: "one side", price: "353" },
-    { style: "boxer cut", price: "534" },
-    { style: "militery cut", price: "533" },
-  ]);
+  const [ hair_Styles, setHair_Styles ] = React.useState ([]);
+  const [newHairStyle, setNewHairStyle] = React.useState({ style: '', price: '' });
 
-  const [newStyle, setNewStyle] = React.useState("");
-  const [newPrice, setNewPrice] = React.useState("");
+  React.useEffect(() => {
+      console.log("in hair styles useEffect !")
+      handleGetStyles();
+  },[])
 
-  const addStyle = () => {
-    if (newStyle && newPrice) {
-      setHair_Styles([...hair_Styles, { style: newStyle, price: newPrice }]);
-      setNewStyle("");
-      setNewPrice("");
+  const handleGetStyles = async () => {
+      const result = await getAllStylesByToken();
+      if (result && result.status === 204) {
+        setHair_Styles([]); // Handle the case where there's no content by setting data to an empty array
+      } else {
+        setHair_Styles(result?.data || []); // Set data to the response data or an empty array if undefined
+      }
+  }
+
+
+  const addStyle = async () => {
+    if (newHairStyle.style && newHairStyle.price) {
+      const result = await addNewStyle(newHairStyle)
+      console.log(result); 
+      handleGetStyles(); 
+      setNewHairStyle({ style: '', price: '' });    
+    }
+    else {
+      toast.warning("fill both fields")
     }
   };
+
+  React.useEffect(() => {
+    console.log(hair_Styles);
+  },[hair_Styles])
+
+  const deleteHairStyleById = async (hairStyleId) => {
+    const result = await deleteHairStyle(hairStyleId);
+    toast.success(result?.data?.message);
+    handleGetStyles();
+  }
   
   return (
     <Container className="styles-container p- mt-3 col-md-9">
@@ -37,10 +62,10 @@ const HairStyles = () => {
         <tbody>
           {hair_Styles.map((sty, index) => (
             <tr key={index}>
-              <td>{sty.style}</td>
-              <td>{sty.price}</td>
+              <td>{sty?.style}</td>
+              <td>{sty?.price}</td>
               <td>
-                <button className="btn btn-danger">del</button>
+                <button className="btn btn-danger" onClick={() => deleteHairStyleById(sty?.id)}>del</button>
               </td>
             </tr>
           ))}
@@ -49,18 +74,18 @@ const HairStyles = () => {
                     <input
                     type="text"
                     placeholder="Enter new style"
-                    value={newStyle}
-                    onChange={(e) => setNewStyle(e.target.value)}
+                    value={newHairStyle.style}
+                    onChange={(e) => setNewHairStyle({ ...newHairStyle, style : e.target.value })}
                     className="mr-2 form-control border-0"
                     />
                 </td>
 
                 <td>
                     <input
-                    type="number"
+                    type="text"
                     placeholder="Enter price"
-                    value={newPrice}
-                    onChange={(e) => setNewPrice(e.target.value)}
+                    value={newHairStyle.price}
+                    onChange={(e) => setNewHairStyle({ ...newHairStyle, price : e.target.value })}
                     className="mr-2 form-control border-0"
                     />
                 </td>

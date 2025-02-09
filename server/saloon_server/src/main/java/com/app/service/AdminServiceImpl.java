@@ -15,8 +15,10 @@ import com.app.dtos.AdminReqDTO;
 import com.app.dtos.AdminResDTO;
 import com.app.dtos.ApiResponse;
 import com.app.dtos.CustomerResDTO;
+import com.app.dtos.BarberResDTOForAdminPanel;
 import com.app.entities.Admin;
 import com.app.repository.AdminRepository;
+import com.app.repository.BarberRepository;
 import com.app.repository.CustomerRepository;
 
 @Service
@@ -29,10 +31,14 @@ public class AdminServiceImpl implements AdminService {
 	private CustomerRepository customerRepository;
 	
 	@Autowired
+	private BarberRepository barberRepository;
+	
+	@Autowired
 	private ModelMapper modelMapper;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
 	
 	@Override
 	public ApiResponse registerAdmin(AdminReqDTO dto) {
@@ -78,6 +84,28 @@ public class AdminServiceImpl implements AdminService {
 		if (customerRepository.existsById(customerId)) {
 			customerRepository.deleteById(customerId);
 			mesg = "Deleted customer...";
+		}
+		return new ApiResponse(mesg);
+	}
+	
+	
+	@Override
+	public List<BarberResDTOForAdminPanel> getAllBarbers() {
+		// map List<Category> --> List<CategoryRespDTO>
+		return barberRepository.findAll() //List<Category>
+				.stream() //Stream<Catgeory>
+				.map(barber -> 
+				modelMapper.map(barber, 
+						BarberResDTOForAdminPanel.class))//Stream<resp dto>
+				.collect(Collectors.toList());//List<dtos>
+	}
+	
+	@Override
+	public ApiResponse deleteBarber(Long barberId) {
+		String mesg = "Invalid Barber ID !!!!!";
+		if (barberRepository.existsById(barberId)) {
+			barberRepository.deleteById(barberId);
+			mesg = "Deleted Barber...";
 		}
 		return new ApiResponse(mesg);
 	}

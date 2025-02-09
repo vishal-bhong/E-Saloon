@@ -10,14 +10,18 @@ const AdminDashboard = () => {
 
       //React.StrictMode intentionally mounts components twice in development to help identify potential side effects and other issues in your components.
       React.useEffect(() => {
-          console.log("in adminprofile useEffect !")
-          handlegetAdminProfile();
+          console.log("in admin dashboard useEffect !")
+          handleGetCustomers();
       },[])
   
   
-      const handlegetAdminProfile = async () => {
+      const handleGetCustomers = async () => {
           const result = await getAllCustomers();
-          setData(result?.data);
+          if (result && result.status === 204) {
+            setData([]); // Handle the case where there's no content by setting data to an empty array
+          } else {
+            setData(result?.data || []); // Set data to the response data or an empty array if undefined
+          }
       }
   
       React.useEffect(() => {
@@ -29,7 +33,7 @@ const AdminDashboard = () => {
         console.log(id);
         const result = await deleteCustomer(id);
         toast.success(result?.data?.message);
-        handlegetAdminProfile();
+        handleGetCustomers();
       }
   
   return (

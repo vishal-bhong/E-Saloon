@@ -14,7 +14,7 @@ const BarberRoutes = () => (
             <Route path="/barber/register" element={<BarberRegisterPage />} />
             <Route path="/barber/dashboard" element={<BarberDashboardPage />} />
             <Route path="/barber/profile" element={<BarberProfilePage />} />
-            <Route path="/barber/profile/edit" element={<BarberProfileEditPage />} />
+            <Route path="/barber/profile/edit/:id" element={<BarberProfileEditPage />} />
             <Route path="/barber/hairStyles" element={<HairStylesPage />} />
         </Routes>
     </BrowserRouter>

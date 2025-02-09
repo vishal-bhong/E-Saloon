@@ -37,3 +37,24 @@ export const deleteCustomer = async (customerId) => {
     
     return result;
 }
+
+
+export const getAllBarbers = async () => {
+    const token = localStorage.getItem("jwtToken");
+
+    const result = await API.get('/admin/getBarbers', { 
+        headers : { 'Authorization' : 'Bearer ' + token }
+    });
+    
+    return result;
+}
+
+export const deleteBarber = async (barberId) => {
+    const token = localStorage.getItem("jwtToken");
+
+    const result = await API.delete(`/admin/delete/barber/${barberId}`, { 
+        headers : { 'Authorization' : 'Bearer ' + token }
+    });
+    
+    return result;
+}

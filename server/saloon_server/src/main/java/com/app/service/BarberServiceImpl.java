@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.custom_exceptions.ApiException;
+import com.app.custom_exceptions.ResourceNotFoundException;
 import com.app.dtos.ApiResponse;
 import com.app.dtos.BarberReqDTO;
-import com.app.dtos.CustomerReqDTO;
+import com.app.dtos.BarberResDTO;
 import com.app.entities.Barber;
-import com.app.entities.Customer;
 import com.app.repository.BarberRepository;
 
 @Service
@@ -40,5 +40,36 @@ public class BarberServiceImpl implements BarberService {
 		Barber persistentBarber = barberRepository.save(transientBarber);
 		
 		return new ApiResponse("barber registered successfully");
+	}
+	
+	@Override
+	public BarberResDTO getBarberById(Long barberId) {
+		System.out.println(barberId);
+		Barber barberEnt = barberRepository.findById(barberId)
+				.orElseThrow(() -> new ResourceNotFoundException("Invalid Barber ID!!!"));
+
+		BarberResDTO barberResDTO = modelMapper.map(barberEnt, BarberResDTO.class);
+		
+		return barberResDTO;
+	}
+	
+	@Override
+	public ApiResponse updateBarberDetails(BarberReqDTO dto, Long barberId) {
+		String mesg = "barber Updation Failed - invalid barber ID";
+		System.out.println(barberId);
+		// validate
+		Barber barberEnt = barberRepository.findById(barberId)
+				.orElseThrow(() -> new ResourceNotFoundException("Invalid Category ID!!!"));
+		// dto --> entity
+		System.out.println(dto.getAddress());
+		System.out.println(barberEnt.getAddress());
+		
+		modelMapper.map(dto, barberEnt);
+		
+		System.out.println(barberEnt.getAddress());
+		
+		barberRepository.save(barberEnt);
+		mesg = "barber details updated !";
+		return new ApiResponse(mesg);
 	}
 }

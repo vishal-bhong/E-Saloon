@@ -2,19 +2,40 @@ import React from "react";
 import { Table, Container, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./BarberManager.css";
+import { deleteBarber, getAllBarbers } from "../../../api/AdminApi";
+import { toast } from "react-toastify";
 
 const BarberManager = () => {
-  const barbers = [
-    { date: "03.03.2021", time: "09:00 PM", service: "Martial Arts", customer: "Isabella Thompson", duration: "30min", status: "Pending", employee: "img1.png" },
-    { date: "03.03.2021", time: "09:00 PM", service: "Martial Arts", customer: "Liam Williams", duration: "30min", status: "Pending", employee: "img2.png" },
-    { date: "03.03.2021", time: "09:00 PM", service: "Martial Arts", customer: "Sofia Martinez", duration: "30min", status: "Pending", employee: "img3.png" },
-  ];
+      const [data, setData] = React.useState([]);
 
-
-  const deleteBarber = async() => {
-    
-  }
+      //React.StrictMode intentionally mounts components twice in development to help identify potential side effects and other issues in your components.
+      React.useEffect(() => {
+          console.log("in BarberManager useEffect !")
+          handleGetBarbers();
+      },[])
   
+  
+      const handleGetBarbers = async () => {
+          const result = await getAllBarbers();
+          if (result && result.status === 204) {
+            setData([]); // Handle the case where there's no content by setting data to an empty array
+          } else {
+            setData(result?.data || []); // Set data to the response data or an empty array if undefined
+          }
+      }
+  
+      React.useEffect(() => {
+          console.log(data)
+      },[data])
+
+
+    const deleteBarberById = async(id) => {
+        console.log(id);
+        const result = await deleteBarber(id); 
+        toast.success(result?.data?.message);
+        handleGetBarbers();
+    }
+    
   return (
     <Container className="barbers-container p-4 mt-5 col-11">
       <Row className="mb-4">
@@ -31,14 +52,14 @@ const BarberManager = () => {
           </tr>
         </thead>
         <tbody>
-          {barbers.map((appt, index) => (
+          {data.map((barber, index) => (
             <tr key={index}>
-              <td>{appt.date}</td>
-              <td>{appt.time}</td>
-              <td>{appt.service}</td>
-              <td>{appt.customer}</td>
+              <td>{barber.shopName}</td>
+              <td>{barber.email}</td>
+              <td>{barber.mobile}</td>
+              <td>{barber.address}</td>
               <td>
-                  <button className="btn btn-danger" onClick={deleteBarber}>
+                  <button className="btn btn-danger" onClick={() => deleteBarberById(barber.id)}>
                       delete
                   </button>
               </td>

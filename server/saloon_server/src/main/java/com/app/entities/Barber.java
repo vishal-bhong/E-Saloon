@@ -1,9 +1,13 @@
 package com.app.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Lob;
-
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +37,9 @@ public class Barber extends User {
 	
 	@Lob // => large object , Mysql - uses longblob
 	private String shopImg;
+	
+	@OneToMany(mappedBy = "stylesOfBarber", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<HairStyle> hairStyles = new ArrayList<>();
 
 	public Barber(String shopName, String email, String password, String mobile, String address, String description, String shopImg) {
 		super(email, password);
@@ -41,5 +48,16 @@ public class Barber extends User {
 		this.address = address;
 		this.description = description;
 		this.shopImg = shopImg;
+	}
+	
+	// helper methods to add n remove child entity
+	public void addHairStyle(HairStyle style) {
+		this.hairStyles.add(style);
+		style.setStylesOfBarber(this);
+	}
+
+	public void removeHairStyle(HairStyle style) {
+		this.hairStyles.remove(style);
+		style.setStylesOfBarber(null);
 	}
 }

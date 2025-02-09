@@ -1,67 +1,58 @@
 import React, { useState, useEffect } from "react";
 import FileBase from 'react-file-base64';
-import { Link } from "react-router-dom";
-// import { useDispatch } from 'react-redux';
-// import { useNavigate } from 'react-router-dom';
+import { Link, useParams } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 // import axios from 'axios';
 // import { toast } from 'react-toastify';
 
 import "./BarberProfileEdit.css";
+import { getBarberProfile, updateBarberProfile } from "../../../api/BarberApi";
+import { toast } from "react-toastify";
 
 
 const BarberProfileEdit = () => {
 
-    const [ barberRegisterData, setBarberRegisterData] = useState({ shopName: '', email:'', password: '', confirmPassword: '', mobileNo: '', dob: '', address: '', experience: '', licenseImg: ''});
- 
-    // const dispatch = useDispatch();
-    // const navigate = useNavigate();
+    const [ barberRegisterData, setBarberRegisterData] = useState({ shopName: '', email:'', mobile: '', address: '', description: '', shopImg: ''});
+    // const { Id } = useParams();
+    const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     setEmailVerificationData({ ...emailVerificationData, isVerifying: false, OTP: '' })
-    // }, [emailVerificationData.emailForVerification]);
+    //React.StrictMode intentionally mounts components twice in development to help identify potential side effects and other issues in your components.
+    React.useEffect(() => {
+        console.log("in barber edit profile useEffect !")
+        handlegetBarberProfile();
+    },[])
 
 
-    // const handleGetOtp = (e) => {
-    //     e.preventDefault();
-    //     setEmailVerificationData({ ...emailVerificationData, isVerifying: true, OTP: '' });
+    const handlegetBarberProfile = async () => {
+        const result = await getBarberProfile();
 
-    //     axios.post('http://localhost:5000/user/generateOtpForEmail', emailVerificationData)
-    //      .then(res =>{
-    //          toast.success(`OTP sent successfully to ${res.data.result}`);                                    
-    //      })
-    //      .catch((err) => {
-    //          console.log(err.message)            
-    //      });
+        if (result?.data) {
+            const { shopName, email, mobile, address, description, shopImg } = result.data;
+            setBarberRegisterData({ shopName, email, mobile, address, description, shopImg });
+        }
+          
+    }
 
-    // }
-
-    // const handleOtpSubmit = (e) => {
-    //     e.preventDefault();
-
-    //     axios.post('http://localhost:5000/user/verifyOtpForEmail', emailVerificationData)
-    //      .then(res =>{
-    //         toast.success(`${res.data.message}`)
-    //         setSignupData({ ...signupData, email: res.data.result })                    
-    //      })
-    //      .catch((err) => {
-    //          toast.error(`${err.response.data.message}`)
-    //      });
-    // }
     
-    const handleSave = (e) => {
-        // e.preventDefault();          
-        // dispatch(userSignup(signupData, navigate));
-        console.log(barberRegisterData);
+    const handleSave = async () => {         
+        const result = await updateBarberProfile(barberRegisterData);
+        console.log(result);
+        
+        if(result?.status === 200){
+            toast.success(result?.data?.message);
+            navigate("/barber/profile");
+        }
     }    
      
 
     const handleExit = () => {
-        setBarberRegisterData({ fullName: '', email:'', address: '', mobileNo: '', Dob: '', desc: '', shopImg: ''});
+        setBarberRegisterData({ fullName: '', email:'', address: '', mobile: '', description: '', shopImg: ''});
+        navigate("/barber/profile");
     }
 
     return (
         <>
-            <form className="flex-column border border-dark" id="register" >     
+            <div className="flex-column border border-dark" id="register" >     
 
                 <div className="col-12 mt-5 ms-2" id="fullwidthinput"></div> 
 
@@ -75,11 +66,7 @@ const BarberProfileEdit = () => {
                 </div> 
 
                 <div className="col-12 mt-3 ms-2" id="fullwidthinput">
-                <input type="text" className="form-control form-control-lg" placeholder="Mobile No." aria-label="mobile No" value={barberRegisterData.mobileNo} onChange={(e) => setBarberRegisterData({...barberRegisterData, mobileNo: e.target.value})} />               
-                </div> 
-
-                <div className="col-12 mt-3 ms-2" id="fullwidthinput">
-                <input type="date" className="form-control form-control-lg" placeholder="Date of birth" aria-label="DoB" value={barberRegisterData.dob} onChange={(e) => setBarberRegisterData({...barberRegisterData, dob: e.target.value})}/>               
+                <input type="text" className="form-control form-control-lg" placeholder="Mobile No." aria-label="mobile No" value={barberRegisterData.mobile} onChange={(e) => setBarberRegisterData({...barberRegisterData, mobile: e.target.value})} />               
                 </div> 
 
 
@@ -93,30 +80,26 @@ const BarberProfileEdit = () => {
                     </div>
 
                     <div className="col-6">
-                        <FileBase type="file" multiple={false} onDone={ ({ base64 }) => setBarberRegisterData({ ...barberRegisterData, shopImgImg: base64 }) } id='file_input2' /> <br />
+                        <FileBase type="file" multiple={false} onDone={ ({ base64 }) => setBarberRegisterData({ ...barberRegisterData, shopImg: base64 }) } id='file_input2' /> <br />
                     </div>
                 </div> 
 
                 <div className="col-12 mt-3 ms-2" id="fullwidthinput">
-                    <textarea type="text" className="form-control form-control-lg" placeholder="shop description" aria-label="shop description" value={barberRegisterData.desc} onChange={(e) => setBarberRegisterData({...barberRegisterData, desc: e.target.value})}/>               
+                    <textarea type="text" className="form-control form-control-lg" placeholder="shop description" aria-label="shop description" value={barberRegisterData.description} onChange={(e) => setBarberRegisterData({...barberRegisterData, description: e.target.value})}/>               
                 </div> 
 
                 <div className="row gx-5 mt-4 mb-3">
 
                     <div className="col ms-2">
-                        <Link to="/barber/profile">
-                            <button className="btn btn-primary" id="regbtn" type="submit" onClick={handleSave}>Save</button>
-                        </Link> 
+                            <button className="btn btn-primary" id="regbtn" onClick={handleSave}>Save</button>
                     </div>
 
                     <div className="col me-1">
-                        <Link to="/barber/profile">
-                            <button className="btn btn-danger" id="regbtn" onClick={handleExit}>exit</button>
-                        </Link>       
+                            <button className="btn btn-danger" id="regbtn" onClick={handleExit}>exit</button>      
                     </div> 
                 </div>
 
-            </form>
+            </div>
         </>
     );
 }

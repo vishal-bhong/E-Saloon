@@ -19,6 +19,7 @@ import com.app.dtos.AdminReqDTO;
 import com.app.dtos.AdminResDTO;
 import com.app.dtos.ApiResponse;
 import com.app.dtos.CustomerResDTO;
+import com.app.dtos.BarberResDTOForAdminPanel;
 import com.app.security.JwtUtils;
 import com.app.service.AdminService;
 
@@ -99,8 +100,33 @@ public class AdminController {
 	
 	
 	@DeleteMapping("/delete/customer/{customerId}")
-	public ResponseEntity<?> deleteCategory(@PathVariable Long customerId) {
+	public ResponseEntity<?> deleteCustomer(@PathVariable Long customerId) {
 		System.out.println("in delete customer " + customerId);
 		return ResponseEntity.ok(adminService.deleteCustomer(customerId));
 	}
+	
+	
+	
+	@GetMapping("/getBarbers")
+	public ResponseEntity<?> getAllBarbers() {
+		System.out.println("in get all barbers");
+		List<BarberResDTOForAdminPanel> barbers = 
+				adminService.getAllBarbers();
+		if (barbers.isEmpty()) {
+			// SC 204
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		} else {
+			// SC 200 + list
+			return ResponseEntity.ok(barbers);
+		}
+	}
+	
+		
+	
+	@DeleteMapping("/delete/barber/{barberId}")
+	public ResponseEntity<?> deleteBarber(@PathVariable Long barberId) {
+		System.out.println("in delete barber " + barberId);
+		return ResponseEntity.ok(adminService.deleteBarber(barberId));
+	}
+	
 }
