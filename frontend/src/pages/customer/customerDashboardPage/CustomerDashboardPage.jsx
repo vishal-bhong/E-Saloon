@@ -7,28 +7,23 @@ import SideDrawer from '../../../components/common/sidedrawer/SideDrawer';
 
 
 const CustomerDashboardPage = () => {
-  const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const toggleDrawer = () => {
-    setDrawerOpen(!drawerOpen);
-  };
+  // const userType = JSON.parse(localStorage.getItem('userType'));
 
-  const customerMenuItems = [
-    'My Profile',
-    'My Appointments',
-    'Notifications',
-    'Feedback',
-    'Contact Us',
-  ];
+  // if(!userType && userType != 'CUSTOMER') {
+  //     return (
+  //         <>
+  //          <h1 style={{ padding: '100px 0 0 150px', fontWeight: 'bold', color: 'red' }}>Please Log in as Customer to see the dashboard.. </h1>
+  //         </>
+  //     )
+  // }
+
 
   return (
     <div className="customer-dashboard-page">
       <Header role="customer" />
-      {/* <SideDrawer isOpen={drawerOpen} toggleDrawer={toggleDrawer} menuItems={customerMenuItems} /> */}
       <SideDrawer role="customer" />
-      {/* <main className={`main- ${drawerOpen ? 'drawer-open' : ''}`}> */}
       <CustomerDashboard />
-      {/* </main> */}
     </div>
   );
 };

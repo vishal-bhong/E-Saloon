@@ -17,3 +17,23 @@ export const getCustomerProfile = async () => {
     
     return result;
 }
+
+export const getAllBarbers = async () => {
+    const token = localStorage.getItem("jwtToken");
+
+    const result = await API.get('/customers/getBarbers', { 
+        headers : { 'Authorization' : 'Bearer ' + token }
+    });
+    
+    return result;
+}
+
+export const getBarberProfile = async (barberId) => {
+    const token = localStorage.getItem("jwtToken");
+
+    const result = await API.get(`/customers/getBarber/${barberId}`, { 
+        headers : { 'Authorization' : 'Bearer ' + token }
+    });
+    
+    return result;
+}

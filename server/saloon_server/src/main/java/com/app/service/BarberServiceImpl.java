@@ -1,5 +1,8 @@
 package com.app.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -72,4 +75,5 @@ public class BarberServiceImpl implements BarberService {
 		mesg = "barber details updated !";
 		return new ApiResponse(mesg);
 	}
+	
 }

@@ -5,6 +5,7 @@ import CustomerDashboardPage from '../pages/customer/customerDashboardPage/Custo
 import CustomerRegisterPage from '../pages/customer/customerRegisterPage/CustomerRegisterPage';
 import MyProfilePage from '../pages/customer/myProfilePage/MyProfilePage';
 import AppointmentPage from '../pages/customer/appointmentsPage/AppointmentPage';
+import BookAppointmentPage from '../pages/customer/bookAppointmentPage/BookAppointmentPage';
 
 
 const CustomerRoutes = () => (
@@ -14,6 +15,7 @@ const CustomerRoutes = () => (
       <Route path="/customer/dashboard" element={<CustomerDashboardPage />} />
       <Route path='/customer/profile' element={<MyProfilePage />} />
       <Route path='/customer/appointments' element={<AppointmentPage />} />
+      <Route path='/customer/book/appointment/:barberId' element={<BookAppointmentPage />} />
     </Routes>
   </Router>
 );

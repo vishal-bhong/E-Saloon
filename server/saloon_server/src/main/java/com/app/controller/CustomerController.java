@@ -1,5 +1,7 @@
 package com.app.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +31,7 @@ import com.app.dtos.AdminResDTO;
 import com.app.dtos.ApiResponse;
 import com.app.dtos.AuthRequest;
 import com.app.dtos.AuthResp;
+import com.app.dtos.BarberResDTO;
 import com.app.dtos.CustomerReqDTO;
 import com.app.dtos.CustomerResDTO;
 import com.app.service.CustomerService;
@@ -95,4 +98,29 @@ public class CustomerController {
         			.body(new ApiResponse(e.getMessage()));
         }   
     }
+	
+	@GetMapping("/getBarbers")
+	public ResponseEntity<?> getAllBarbers() {
+		System.out.println("in get all barbers");
+		List<BarberResDTO> barbers = 
+				customerService.getAllBarbers();
+		if (barbers.isEmpty()) {
+			// SC 204
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		} else {
+			// SC 200 + list
+			return ResponseEntity.ok(barbers);
+		}
+	}
+	
+	@GetMapping("/getBarber/{barberId}")
+	public ResponseEntity<?> getCategoryAndPosts(@PathVariable Long barberId){
+		System.out.println("in get barber n hairstyles "+barberId);
+		try {
+		return ResponseEntity.ok(customerService.getBarberWithStyles(barberId));
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new ApiResponse(e.getMessage()));
+		}
+	}
 }

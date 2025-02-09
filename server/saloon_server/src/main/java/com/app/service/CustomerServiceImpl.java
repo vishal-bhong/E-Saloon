@@ -1,5 +1,8 @@
 package com.app.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,10 +14,14 @@ import com.app.custom_exceptions.ApiException;
 import com.app.custom_exceptions.ResourceNotFoundException;
 import com.app.dtos.AdminResDTO;
 import com.app.dtos.ApiResponse;
+import com.app.dtos.BarberResCompleteDTO;
+import com.app.dtos.BarberResDTO;
 import com.app.dtos.CustomerReqDTO;
 import com.app.dtos.CustomerResDTO;
 import com.app.entities.Admin;
+import com.app.entities.Barber;
 import com.app.entities.Customer;
+import com.app.repository.BarberRepository;
 import com.app.repository.CustomerRepository;
 
 @Service
@@ -23,6 +30,9 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	@Autowired
 	private CustomerRepository customerRepository;
+	
+	@Autowired
+	private BarberRepository barberRepository;
 	
 	@Autowired
 	private ModelMapper modelMapper;
@@ -55,5 +65,27 @@ public class CustomerServiceImpl implements CustomerService {
 		System.out.println(customerResDTO);
 		
 		return customerResDTO;
+	}
+	
+	@Override
+	public List<BarberResDTO> getAllBarbers() {
+		// map List<Category> --> List<CategoryRespDTO>
+		return barberRepository.findAll() //List<Category>
+				.stream() //Stream<Catgeory>
+				.map(barber -> 
+				modelMapper.map(barber, BarberResDTO.class))//Stream<resp dto>
+				.collect(Collectors.toList());//List<dtos>
+	}
+	
+	@Override
+	public BarberResCompleteDTO getBarberWithStyles(Long barberId) {
+		Barber barberEnt = 
+				barberRepository.getBarberWithHairStyles(barberId)
+				.orElseThrow(() -> 
+				new ResourceNotFoundException("Invalid barber ID!!!"));
+		//categoryEnt : persistent
+		// entity -> dto
+		return modelMapper.map(barberEnt, BarberResCompleteDTO.class);
+
 	}
 }
