@@ -62,3 +62,24 @@ export const deleteHairStyle = async (hairStyleId) => {
     
     return result;
 }
+
+export const getAllAppointments = async () => {
+    const token = localStorage.getItem("jwtToken");
+
+    const result = await API.get('/barber/appointments', { 
+        headers : { 'Authorization' : 'Bearer ' + token }
+    });
+    
+    return result?.data;
+}
+
+
+export const updateAppointmentStatus = async (appointmentId, status) => {
+    const token = localStorage.getItem("jwtToken");
+
+    const result = await API.put(`/barber/updateAppointmentStatus/${appointmentId}`, { status }, { 
+        headers : { 'Authorization' : 'Bearer ' + token }
+    });
+
+    return result?.data;
+}

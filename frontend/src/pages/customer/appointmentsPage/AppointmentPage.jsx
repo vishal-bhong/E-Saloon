@@ -1,48 +1,35 @@
+import React from "react";
 import Appointment from "../../../components/customer/appointments/Appointment";
 import Advertisement from "../../../components/common/advertisement/Advertisement";
 import Header from "../../../components/common/header/Header";
 import SideDrawer from "../../../components/common/sidedrawer/SideDrawer";
+import { getAllAppointments } from "../../../api/CustomerApi";
 
 
 const AppointmentPage = () => {
 
-    const appointments = [
-        {
-            shopName : "Barber shop 1",
-            address : "A/P Hinjewadi, pune",
-            date : "16/03/2024",
-            time: "12:30",
-            status : 'Expired'
-        },
-        {
-            shopName : "Barber shop 2",
-            address : "A/P karad, sangli",
-            date : "23/05/2024",
-            time: "05:55",
-            status : 'Expired'
-        },
-        {
-            shopName : "Barber shop 3",
-            address : "A/P Akurdi, pune",
-            date : "17/08/2024",
-            time: "03:15",
-            status : 'Expired'
-        },
-        {
-            shopName : "Barber shop 4",
-            address : "A/P Chichawad, pune",
-            date : "04/12/2024",
-            time: "10:40",
-            status : 'Active'
-        },
-        {
-            shopName : "Barber shop 5",
-            address : "A/P Wagholi, pune",
-            date : "13/02/2025",
-            time: "09:25",
-            status : 'Active'
+    const [data, setData] = React.useState([]);
+
+    //React.StrictMode intentionally mounts components twice in development to help identify potential side effects and other issues in your components.
+    React.useEffect(() => {
+        console.log("in get appointments useEffect !")
+        handleGetAppointments();
+    },[])
+
+
+    const handleGetAppointments = async () => {
+        const result = await getAllAppointments();                
+        if (result && result.status === 204) {
+        setData([]); // Handle the case where there's no content by setting data to an empty array
+        } else {
+        setData(result || []); // Set data to the response data or an empty array if undefined
         }
-    ]
+    }
+
+    React.useEffect(() => {
+        console.log(data)
+    },[data])
+
 
     return (
         <>
@@ -50,7 +37,7 @@ const AppointmentPage = () => {
             <SideDrawer role="customer" />
             <div className="">
                 {
-                    appointments.map((appointment) => {
+                    data?.map((appointment) => {
                         return (
                             <Appointment key={appointment.shopName} appointment={appointment} />
                         )

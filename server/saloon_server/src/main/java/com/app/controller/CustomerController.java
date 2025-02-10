@@ -32,6 +32,7 @@ import com.app.dtos.ApiResponse;
 import com.app.dtos.AuthRequest;
 import com.app.dtos.AuthResp;
 import com.app.dtos.BarberResDTO;
+import com.app.dtos.CustomerAppointmentDTO;
 import com.app.dtos.CustomerReqDTO;
 import com.app.dtos.CustomerResDTO;
 import com.app.dtos.OrderResponse;
@@ -144,4 +145,69 @@ public class CustomerController {
 	    						.body(new ApiResponse(e.getMessage()));
 	     }	     
 	 }
+	 
+	 
+	 @PostMapping("/bookAppointment/{barberId}")
+	 public ResponseEntity<?> bookAppointment(@PathVariable Long barberId, HttpServletRequest request) {
+		 System.out.println("in book appointment");
+		 String authHeader = request.getHeader("Authorization");
+		 
+		 System.out.println(authHeader);
+		 Long userId = null;
+		 
+		 try {
+			 if (authHeader != null && authHeader.startsWith("Bearer ")) {
+				 String jwt = authHeader.substring(7);
+				 
+				 // Validate token and extract claims
+				 Claims claims = jwtUtils.validateJwtToken(jwt);
+				 
+				 // Retrieve user ID from claims
+				 userId = jwtUtils.getUserIdFromJwtToken(claims);
+			 }
+			 
+			 return ResponseEntity.ok(customerService.bookAppointment(userId, barberId));
+
+		 } catch (RuntimeException e) {
+			 return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					 .body(new ApiResponse(e.getMessage()));
+		 } 
+	 }
+	 
+	 
+	 @GetMapping("/appointments")
+	 public ResponseEntity<?> getCustomerAppointments(HttpServletRequest request) {
+	     System.out.println("Fetching customer appointments");
+	     String authHeader = request.getHeader("Authorization");
+
+	     System.out.println(authHeader);
+	     Long userId = null;
+
+	     try {
+	         if (authHeader != null && authHeader.startsWith("Bearer ")) {
+	             String jwt = authHeader.substring(7);
+
+	             // Validate token and extract claims
+	             Claims claims = jwtUtils.validateJwtToken(jwt);
+
+	             // Retrieve user ID from claims
+	             userId = jwtUtils.getUserIdFromJwtToken(claims);
+	         }
+
+	        List<CustomerAppointmentDTO> appointments = customerService.getCustomerAppointments(userId);
+	 		if (appointments.isEmpty()) {
+				// SC 204
+				return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+			} else {
+				// SC 200 + list
+				return ResponseEntity.ok(appointments);
+			}
+
+	     } catch (RuntimeException e) {
+	         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                 .body(new ApiResponse(e.getMessage()));
+	     }
+	 }
+	 
+
 }

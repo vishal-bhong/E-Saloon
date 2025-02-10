@@ -49,3 +49,23 @@ export const getPaymentOrder = async () => {
     
     return result?.data;
 }
+
+export const bookAppointmentToShop = async (barberId) => {
+    const token = localStorage.getItem("jwtToken");
+
+    const result = await API.post(`/customers/bookAppointment/${barberId}`, {}, { 
+        headers : { 'Authorization' : 'Bearer ' + token }
+    });
+    
+    return result;
+}
+
+export const getAllAppointments = async () => {
+    const token = localStorage.getItem("jwtToken");
+
+    const result = await API.get('/customers/appointments', { 
+        headers : { 'Authorization' : 'Bearer ' + token }
+    });
+    
+    return result?.data;
+}

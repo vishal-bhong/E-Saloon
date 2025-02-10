@@ -40,6 +40,10 @@ public class Barber extends User {
 	
 	@OneToMany(mappedBy = "stylesOfBarber", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<HairStyle> hairStyles = new ArrayList<>();
+	
+	
+    @OneToMany(mappedBy = "barberId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Appointment> appointments = new ArrayList<>();
 
 	public Barber(String shopName, String email, String password, String mobile, String address, String description, String shopImg) {
 		super(email, password);
@@ -60,4 +64,17 @@ public class Barber extends User {
 		this.hairStyles.remove(style);
 		style.setStylesOfBarber(null);
 	}
+	
+	
+    // Helper methods for Appointments
+    public void addAppointment(Appointment appointment) {
+        this.appointments.add(appointment);
+        appointment.setBarberId(this);
+    }
+
+    public void removeAppointment(Appointment appointment) {
+        this.appointments.remove(appointment);
+        appointment.setBarberId(null);
+    }
+	
 }

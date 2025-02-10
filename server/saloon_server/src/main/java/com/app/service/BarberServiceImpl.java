@@ -12,9 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.app.custom_exceptions.ApiException;
 import com.app.custom_exceptions.ResourceNotFoundException;
 import com.app.dtos.ApiResponse;
+import com.app.dtos.BarberAppointmentDTO;
 import com.app.dtos.BarberReqDTO;
 import com.app.dtos.BarberResDTO;
+import com.app.entities.Appointment;
+import com.app.entities.AppointmentStatus;
 import com.app.entities.Barber;
+import com.app.repository.AppointmentRepository;
 import com.app.repository.BarberRepository;
 
 @Service
@@ -29,6 +33,9 @@ public class BarberServiceImpl implements BarberService {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private AppointmentRepository appointmentRepository;
 	
 	@Override
 	public ApiResponse registerBarber(BarberReqDTO dto) {
@@ -75,5 +82,40 @@ public class BarberServiceImpl implements BarberService {
 		mesg = "barber details updated !";
 		return new ApiResponse(mesg);
 	}
+	
+	
+	@Override
+	public List<BarberAppointmentDTO> getBarberAppointments(Long barberId) {
+	    Barber barber = barberRepository.findById(barberId)
+	            .orElseThrow(() -> new ResourceNotFoundException("Barber not found"));
+
+	    List<Appointment> appointments = appointmentRepository.findByBarberId_Id(barberId);
+
+	    return appointments.stream()
+	            .map(appointment -> new BarberAppointmentDTO(
+	            		appointment.getId(),
+	                    appointment.getUserId().getFullName(),
+	                    appointment.getUserId().getAddress(),
+	                    appointment.getUserId().getMobile(),
+	                    appointment.getUserId().getEmail(),
+	                    appointment.getAppointmentDate(),
+	                    appointment.getStatus()
+	            ))
+	            .collect(Collectors.toList());
+	}
+	
+	
+	@Override
+	public ApiResponse updateAppointmentStatus(Long appointmentId, String status) {
+	    Appointment appointment = appointmentRepository.findById(appointmentId)
+	            .orElseThrow(() -> new ResourceNotFoundException("Appointment not found"));
+
+	    AppointmentStatus newStatus = AppointmentStatus.valueOf(status.toUpperCase());
+	    appointment.setStatus(newStatus);
+	    appointmentRepository.save(appointment);
+	    return new ApiResponse("Status updated....");
+	}
+
+
 	
 }

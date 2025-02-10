@@ -3,12 +3,14 @@ import './BookAppointment.css'
 import { MdMailOutline, MdPhone } from 'react-icons/md'
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom'
-import { getBarberProfile } from '../../../api/CustomerApi';
+import { bookAppointmentToShop, getBarberProfile, getPaymentOrder } from '../../../api/CustomerApi';
+import { toast } from 'react-toastify';
 
 
 
 const BookAppointment = () => {
     const [data, setData] = React.useState({});
+    const [orderData, setOrderData] = React.useState({});
     const { barberId } = useParams();
 
     //React.StrictMode intentionally mounts components twice in development to help identify potential side effects and other issues in your components.
@@ -27,6 +29,52 @@ const BookAppointment = () => {
     React.useEffect(() => {
         console.log(data)
     },[data])
+
+    const handleBookAppointment = async () => {
+        const result = await getPaymentOrder();
+        setOrderData(result);
+        handlePayment();
+
+    }
+
+    const verifiedBookAppointment = async () => {
+        const respose = await bookAppointmentToShop(barberId);
+        toast.success(respose?.data?.message);
+    }
+
+    const handlePayment = async () => {    
+        console.log(orderData);
+    
+        const options = {
+          key: 'rzp_test_ToloqmvsWNJBgl', // Enter the Key ID generated from the Dashboard
+          amount: orderData.amount, // Amount in paise
+          currency: 'INR',
+          name: 'E - Saloon',
+          description: 'Test Transaction',
+          // image: 'https://your-app-logo-url', // Optional
+          order_id: orderData.id, // Order ID from backend
+          handler: function (response) {
+            console.log('Payment ID: ' + response.razorpay_payment_id,
+                  'Order ID: ' + response.razorpay_order_id,
+                  'Signature: ' + response.razorpay_signature);
+                  verifiedBookAppointment();
+          },
+          prefill: {
+            name: 'vishal bhong',
+            email: 'vishal@example.com',
+            contact: '7397974785',
+          },
+          notes: {
+            address: 'Address note',
+          },
+          theme: {
+            color: '#3399cc',
+          },
+        };
+    
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+    }
 
     return (
         <div className="appointmentPage border border-dark mb-5">
@@ -73,7 +121,7 @@ const BookAppointment = () => {
                 <p className='row ms-4 fs-4 fw-medium fst-italic'>Hair styles offered :</p>
                 <ul>
                     {
-                        data?.hairStyles.map((hairStyle) => (
+                        data?.hairStyles?.map((hairStyle) => (
                             <li>
                                 {hairStyle.style} - Rs. {hairStyle.price}
                             </li>
@@ -84,7 +132,7 @@ const BookAppointment = () => {
 
 
             <div className="d-flex justify-content-center my-5">
-                    <button className="btn btn-primary w-50" id="regbtn">Book Appointment</button>
+                    <button className="btn btn-primary w-50" id="regbtn" onClick={handleBookAppointment}>Book Appointment</button>
             </div>
     
         </div>
